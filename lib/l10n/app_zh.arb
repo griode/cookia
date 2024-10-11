@@ -144,7 +144,7 @@
   "fistScanMessage": "点击屏幕中央的扫描图标以开始。",
   "toResearch": "搜索",
   "researchQuestion": "你在寻找什么？",
-  "mealtype": "{mealtype, select, breakfast{早餐} lunch{午餐} dinner{晚餐} other{其他}}",
+  "mealtype": "{mealtype, select, breakfast{早餐} lunch{午餐} dinner{晚餐} dessert{甜品} snack{小吃} other{其他}}",
   "continent": "{continent, select, north_american{北美洲} south_american{南美洲} european{欧洲} asian{亚洲} oceanian{大洋洲} african{非洲} other{其他}}",
   "mealCategory": "食物类别",
   "browseAll": "浏览全部"

@@ -144,7 +144,7 @@
   "fistScanMessage": "Press the center icon on the screen to start.",
   "toResearch": "To research",
   "researchQuestion": "What are you looking for ?",
-  "mealtype": "{mealtype, select, breakfast{Breakfast} lunch{Lunch} dinner{Dinner} other{Other}}",
+  "mealtype": "{mealtype, select, breakfast{Breakfast} lunch{Lunch} dinner{Dinner} dessert{Dessert} snack{Snack} other{Other}}",
   "continent": "{continent, select, north_american{North American} south_american{South American} european{European} asian{Asian} oceanian{Oceanian} african{African} other{Other}}",
   "mealCategory": "Meal categories",
   "browseAll": "Browse all"

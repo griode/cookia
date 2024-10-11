@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cookia/ui/widgets/larg_recipe_card.dart';
 import 'package:flutter/material.dart';
 import 'package:cookia/data/model/recipe.dart';
 import 'package:cookia/data/provider/recipe_provider.dart';
@@ -56,10 +57,9 @@ class _ListRecipeGenerateState extends State<ListRecipeGenerate> {
         leading: backButton(context),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Column(
           children: [
-            ..._recipes.map((e) => RecipeCard(recipe: e.data())),
+            ..._recipes.map((e) => LargRecipeCard(recipe: e.data())),
             const SizedBox(height: 8),
             if (_isLoading)
               const CircularProgressIndicator()

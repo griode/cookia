@@ -1,3 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cookia/data/model/recipe.dart';
+import 'package:cookia/data/provider/recipe_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -78,31 +81,74 @@ class _MenuPageState extends State<MenuPage> {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        child: Column(
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  _appLocalizations.dayOfWeek(
-                                    DateFormat.EEEE()
-                                        .format(weekMenu!.menu[day]['date']
-                                            .toDate())
-                                        .toLowerCase(),
-                                  ),
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${DateFormat.EEEE().format(weekMenu!.menu[day]['date'].toDate())} ${weekMenu.menu[day]['date'].toDate().day}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium!
+                                          .copyWith(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                    const SizedBox(height: 2),
+                                  ],
                                 ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  DateFormat.Md().format(
-                                      weekMenu.menu[day]['date'].toDate()),
-                                ),
+                                const Icon(HugeIcons.strokeRoundedArrowRight01)
                               ],
                             ),
-                            const Icon(HugeIcons.strokeRoundedArrowRight01)
+                            const SizedBox(height: 8),
+                            const Divider(),
+                            const SizedBox(height: 8),
+                            FutureBuilder(
+                              future: _buildRecipers(weekMenu.menu[day]),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData && snapshot.data != null) {
+                                  return Column(
+                                    children: snapshot.data!.map((recipe) {
+                                      return Row(
+                                        children: [
+                                          Container(
+                                            margin: const EdgeInsets.symmetric(
+                                              vertical: 4,
+                                            ),
+                                            width: 40,
+                                            height: 40,
+                                            decoration: BoxDecoration(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                image: DecorationImage(
+                                                  image:
+                                                      CachedNetworkImageProvider(
+                                                          recipe.image ?? ""),
+                                                )),
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Expanded(
+                                            child: Text(
+                                              recipe.name ?? "",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    }).toList(),
+                                  );
+                                }
+                                return const SizedBox();
+                              },
+                            )
                           ],
                         ),
                       ),
@@ -161,5 +207,25 @@ class _MenuPageState extends State<MenuPage> {
         ),
       ),
     );
+  }
+
+  Future<List<Recipe>> _buildRecipers(Map<String, dynamic> menu) async {
+    if (menu['recipe_ids'] == null || menu['recipe_ids'].isEmpty) {
+      return [];
+    }
+
+    var recipeIds = menu['recipe_ids'] as List;
+    if (menu['recipe_ids'].length == 1) {
+      recipeIds = recipeIds = [recipeIds[0]];
+    } else {
+      recipeIds = recipeIds = [recipeIds[0], recipeIds[1]];
+    }
+    
+    
+    List<Recipe> recipers = [];
+    for (String id in recipeIds) {
+      recipers.add((await RecipeProvider.getById(id))!);
+    }
+    return recipers;
   }
 }

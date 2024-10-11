@@ -51,6 +51,8 @@ class ChangeLanguage extends StatelessWidget {
     pref.setString('language', locale!.languageCode);
     appLocale.value = locale;
     await UserProvider.update({"language": locale.languageCode});
-    context.pop();
+    if (context.mounted) {
+      context.pop();
+    }
   }
 }

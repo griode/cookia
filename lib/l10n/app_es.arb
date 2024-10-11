@@ -144,7 +144,7 @@
   "fistScanMessage": "Pulse el ícono de escaneo en el centro de la pantalla para comenzar.",
   "toResearch": "Para buscar",
   "researchQuestion": "¿Qué estás buscando?",
-  "mealtype": "{mealtype, select, breakfast{Desayuno} lunch{Almuerzo} dinner{Cena} other{Otro}}",
+  "mealtype": "{mealtype, select, breakfast{Desayuno} lunch{Almuerzo} dinner{Cena} dessert{Postre} snack{Desayuno} other{Otro}}",
   "continent": "{continent, select, north_american{Norteamericano} south_american{Sudamericano} european{Europeo} asian{Asiático} oceanian{Oceanía} african{Africano} other{Otro}}",
   "mealCategory": "Categorías de Comida",
   "browseAll": "Explorar todo"

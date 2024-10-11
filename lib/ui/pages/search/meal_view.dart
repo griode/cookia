@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cookia/ui/widgets/larg_recipe_card.dart';
 import 'package:flutter/material.dart';
 import 'package:cookia/data/model/recipe.dart';
 import 'package:cookia/data/provider/recipe_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cookia/ui/widgets/back_button.dart';
-import 'package:cookia/ui/widgets/recipe_card.dart';
 
 class MealView extends StatefulWidget {
   final String mealType;
@@ -38,8 +38,6 @@ class _MealViewState extends State<MealView> {
     _loadRecipes();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,13 +60,11 @@ class _MealViewState extends State<MealView> {
 
             return Center(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ..._hitoryListRecipes
-                        .map((e) => RecipeCard(recipe: e.data()))
-                        ,
+                        .map((e) => LargRecipeCard(recipe: e.data())),
                     const SizedBox(height: 8),
                     if (_isLoading)
                       const CircularProgressIndicator()
