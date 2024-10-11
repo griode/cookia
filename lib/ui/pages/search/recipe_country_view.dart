@@ -5,7 +5,6 @@ import 'package:cookia/data/model/recipe.dart';
 import 'package:cookia/data/provider/recipe_provider.dart';
 import 'package:cookia/ui/widgets/back_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:cookia/ui/widgets/recipe_card.dart';
 
 class RecipeCountryView extends StatefulWidget {
   final String continentName;
@@ -22,7 +21,7 @@ class _RecipeCountryViewState extends State<RecipeCountryView> {
   QueryDocumentSnapshot<Recipe>? _lastRecipe;
   late Future<List<QueryDocumentSnapshot<Recipe>>> _listRecipes;
   late AppLocalizations lang = AppLocalizations.of(context)!;
-  List<QueryDocumentSnapshot<Recipe>> _hitoryListRecipes = [];
+  List<QueryDocumentSnapshot<Recipe>> _historyListRecipes = [];
   final bool _isLoading = false; // Indicateur de chargement
 
   void _loadRecipes() {
@@ -59,8 +58,8 @@ class _RecipeCountryViewState extends State<RecipeCountryView> {
           if (snapshot.hasData && snapshot.data != null) {
             if (snapshot.data!.isNotEmpty) {
               _lastRecipe = snapshot.data!.last;
-              _hitoryListRecipes.addAll(snapshot.data ?? []);
-              _hitoryListRecipes = _hitoryListRecipes.toSet().toList();
+              _historyListRecipes.addAll(snapshot.data ?? []);
+              _historyListRecipes = _historyListRecipes.toSet().toList();
             }
 
             return Center(
@@ -68,8 +67,8 @@ class _RecipeCountryViewState extends State<RecipeCountryView> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ..._hitoryListRecipes
-                        .map((e) => LargRecipeCard(recipe: e.data())),
+                    ..._historyListRecipes
+                        .map((e) => LargeRecipeCard(recipe: e.data())),
                     const SizedBox(height: 8),
                     if (_isLoading)
                       const CircularProgressIndicator()

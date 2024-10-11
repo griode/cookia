@@ -220,8 +220,7 @@ class _MenuPageState extends State<MenuPage> {
     } else {
       recipeIds = recipeIds = [recipeIds[0], recipeIds[1]];
     }
-    
-    
+
     List<Recipe> recipers = [];
     for (String id in recipeIds) {
       recipers.add((await RecipeProvider.getById(id))!);

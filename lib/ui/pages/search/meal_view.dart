@@ -64,7 +64,7 @@ class _MealViewState extends State<MealView> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ..._hitoryListRecipes
-                        .map((e) => LargRecipeCard(recipe: e.data())),
+                        .map((e) => LargeRecipeCard(recipe: e.data())),
                     const SizedBox(height: 8),
                     if (_isLoading)
                       const CircularProgressIndicator()

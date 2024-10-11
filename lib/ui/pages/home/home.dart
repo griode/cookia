@@ -112,18 +112,16 @@ class _HomePageState extends State<HomePage> {
               child: ListTile(
                 minTileHeight: 0,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-                onTap: recipe != null
-                    ? () => context.pushNamed(
-                          AppRouteName.listRecipeGenerate.name,
-                          extra: recipe,
-                        )
-                    : null,
+                onTap: () => context.pushNamed(
+                  AppRouteName.listRecipeGenerate.name,
+                  extra: recipe,
+                ),
                 title: Text(lang!.recipeGenerateTitle),
                 trailing: Text(lang!.showAll),
               ),
             ),
             StreamBuilder<QuerySnapshot<Recipe>>(
-              stream: RecipeProvider.limite(),
+              stream: RecipeProvider.limit(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return emptyList(context);

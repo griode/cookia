@@ -6,9 +6,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 
-class LargRecipeCard extends StatelessWidget {
+class LargeRecipeCard extends StatelessWidget {
   final Recipe recipe;
-  const LargRecipeCard({super.key, required this.recipe});
+  const LargeRecipeCard({super.key, required this.recipe});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,9 @@ class LargRecipeCard extends StatelessWidget {
             tag: recipe.name!,
             child: Container(
               height: 360.0,
+              margin: const EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24),
                 image: DecorationImage(
                   image: CachedNetworkImageProvider(recipe.image ?? ""),
                   fit: BoxFit.cover,

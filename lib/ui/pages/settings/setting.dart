@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cookia/ui/pages/abonement/subscription_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -146,6 +147,14 @@ class _SettingPageState extends State<SettingPage> {
               onTap: () => context.pushNamed(AppRouteName.about.name),
               leading: const Icon(HugeIcons.strokeRoundedFile01),
               title: Text(_appLocalizations!.about),
+            ),
+            ListTile(
+              onTap: () => showModalBottomSheet(
+                context: context,
+                builder: (context) => const SubscriptionPage(),
+              ),
+              leading: const Icon(HugeIcons.strokeRoundedFile01),
+              title: Text("Subscription"),
             ),
           ],
         ),

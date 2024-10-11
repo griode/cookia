@@ -21,7 +21,7 @@ class RecipeProvider {
     }
   }
 
-  static Stream<QuerySnapshot<Recipe>>? limite({int limit = 4}) {
+  static Stream<QuerySnapshot<Recipe>>? limit({int limit = 4}) {
     try {
       var response = recipesCollection
           .limit(limit)
@@ -33,7 +33,7 @@ class RecipeProvider {
     }
   }
 
-  static Future<QueryDocumentSnapshot<Recipe>?> limiteFuture(
+  static Future<QueryDocumentSnapshot<Recipe>?> limitFuture(
       String country) async {
     try {
       var response = await recipesCollection
@@ -75,17 +75,36 @@ class RecipeProvider {
     }
   }
 
-  static Future<List<QueryDocumentSnapshot<Recipe>>> findAll(
-      {required DocumentSnapshot<Object?> startAt, int limit = 10}) async {
+  static Future<List<QueryDocumentSnapshot<Recipe>>> findAllWitchLast(
+      {int limit = 10, required DocumentSnapshot<Object?> lastRecipe}) async {
     try {
-      var response2 = await recipesCollection
+      String language = currentUserAuth!.language ?? "";
+      var response = await recipesCollection
           .orderBy("created_at")
-          .startAfterDocument(startAt)
+          .where("created_by", isEqualTo: currentUserAuth!.id)
+          .where('language', isEqualTo: language)
+          .startAfterDocument(lastRecipe)
           .limit(limit)
           .get();
-      return response2.docs;
-    } catch (e) {
-      debugPrint(e.toString());
+      return response.docs;
+    } catch (error) {
+      debugPrint(error.toString());
+      return [];
+    }
+  }
+
+  static Future<List<QueryDocumentSnapshot<Recipe>>> findAll(int limit) async {
+    try {
+      String language = currentUserAuth!.language ?? "";
+      var response = await recipesCollection
+          .orderBy("created_at")
+          .where('language', isEqualTo: language)
+          .where("created_by", isEqualTo: currentUserAuth!.id)
+          .limit(limit)
+          .get();
+      return response.docs;
+    } catch (error) {
+      debugPrint(error.toString());
       return [];
     }
   }
@@ -112,16 +131,16 @@ class RecipeProvider {
     }
   }
 
-  // Meal manager methode
+  // Meal manager method
   static Future<List<QueryDocumentSnapshot<Recipe>>> getRecipeWitchMeal(
-      DocumentSnapshot<Object?> lastReicpe, String mealType, int limit) async {
+      DocumentSnapshot<Object?> lastRecipe, String mealType, int limit) async {
     try {
       String language = currentUserAuth!.language ?? "";
       var response = await recipesCollection
           .orderBy("created_at")
           .where('language', isEqualTo: language)
           .where('meal_type', isEqualTo: mealType)
-          .startAfterDocument(lastReicpe)
+          .startAfterDocument(lastRecipe)
           .limit(limit)
           .get();
       return response.docs;
@@ -150,7 +169,7 @@ class RecipeProvider {
 
   // Get recipe for continent
   static Future<List<QueryDocumentSnapshot<Recipe>>> getRecipeWitchContinent(
-      DocumentSnapshot<Object?> lastReicpe,
+      DocumentSnapshot<Object?> lastRecipe,
       String continentName,
       int limit) async {
     try {
@@ -159,7 +178,7 @@ class RecipeProvider {
           .orderBy("created_at")
           .where('language', isEqualTo: language)
           .where('continent', isEqualTo: continentName)
-          .startAfterDocument(lastReicpe)
+          .startAfterDocument(lastRecipe)
           .limit(limit)
           .get();
       return response.docs;
@@ -184,9 +203,5 @@ class RecipeProvider {
       debugPrint(error.toString());
       return [];
     }
-  }
-
-  static void delete() {
-    recipesCollection.where('image', isEqualTo: '');
   }
 }

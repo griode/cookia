@@ -8,7 +8,6 @@ import 'package:cookia/data/provider/user_provider.dart';
 import 'package:cookia/data/services/firebase_notification.dart';
 import 'package:cookia/firebase_options.dart';
 import 'package:cookia/utils/router/router_config.dart';
-
 import 'data/services/local_notifications.dart';
 
 Future<void> main() async {

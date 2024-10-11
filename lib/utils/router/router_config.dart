@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -61,7 +60,7 @@ GoRouter routerConfig = GoRouter(
       pageBuilder: (context, state) => slideTransitionPage(
         state,
         RecipeCountryView(
-          continentName: state.pathParameters['continentName']?? '',
+          continentName: state.pathParameters['continentName'] ?? '',
         ),
       ),
     ),
@@ -127,10 +126,9 @@ GoRouter routerConfig = GoRouter(
       path: '/list_recipe_generate',
       name: AppRouteName.listRecipeGenerate.name,
       pageBuilder: (context, state) => slideTransitionPage(
-          state,
-          ListRecipeGenerate(
-            recipe: state.extra as QueryDocumentSnapshot<Recipe>,
-          )),
+        state,
+        const ListRecipeGenerate(),
+      ),
     ),
     GoRoute(
       path: '/about',

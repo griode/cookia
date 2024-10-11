@@ -21,7 +21,7 @@ class WeekMenuProvider {
     }
   }
 
-  static Future<bool> addMenuToRecipe(Map<String, dynamic> menu) async {
+  static Future<bool> updateMenuToRecipe(Map<String, dynamic> menu) async {
     try {
       await _weeklyCollection.doc(currentUserAuth!.id).update({"menu": menu});
       return true;

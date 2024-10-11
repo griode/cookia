@@ -81,7 +81,7 @@ class _AddToMenuState extends State<AddToMenu> {
                             false) {
                           menu["recipe_ids"].add(widget.recipe.id);
                           weekMenu.menu[day] = menu;
-                          result = await WeekMenuProvider.addMenuToRecipe(
+                          result = await WeekMenuProvider.updateMenuToRecipe(
                               weekMenu.menu);
                         }
                         context.pop(result);

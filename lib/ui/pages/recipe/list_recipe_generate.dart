@@ -4,79 +4,93 @@ import 'package:flutter/material.dart';
 import 'package:cookia/data/model/recipe.dart';
 import 'package:cookia/data/provider/recipe_provider.dart';
 import 'package:cookia/ui/widgets/back_button.dart';
-import 'package:cookia/ui/widgets/recipe_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ListRecipeGenerate extends StatefulWidget {
-  final QueryDocumentSnapshot<Recipe> recipe;
-  const ListRecipeGenerate({super.key, required this.recipe});
+  const ListRecipeGenerate({super.key});
 
   @override
-  State<ListRecipeGenerate> createState() => _ListRecipeGenerateState();
+  State<ListRecipeGenerate> createState() => ListRecipeGenerateState();
 }
 
-class _ListRecipeGenerateState extends State<ListRecipeGenerate> {
-  late QueryDocumentSnapshot<Recipe> _lastRecipe;
-  late AppLocalizations lang;
-  final List<QueryDocumentSnapshot<Recipe>> _recipes = [];
-  bool _isLoading = false; // Indicateur de chargement
+class ListRecipeGenerateState extends State<ListRecipeGenerate> {
+  QueryDocumentSnapshot<Recipe>? _lastRecipe;
+  late Future<List<QueryDocumentSnapshot<Recipe>>> _listRecipes;
+  late AppLocalizations lang = AppLocalizations.of(context)!;
+  List<QueryDocumentSnapshot<Recipe>> _historyListRecipes = [];
+  final bool _isLoading = false; // Indicateur de chargement
+
+  void _loadRecipes() {
+    if (_lastRecipe != null) {
+      _listRecipes = RecipeProvider.findAllWitchLast(
+        lastRecipe: _lastRecipe!,
+        limit: 10,
+      );
+      return;
+    } else {
+      _listRecipes = RecipeProvider.findAll(10);
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    _lastRecipe = widget.recipe;
-    _loadRecipes(); // Chargement initial des recettes
-  }
-
-  Future<void> _loadRecipes() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    final snapshot =
-        await RecipeProvider.findAll(startAt: _lastRecipe, limit: 6);
-    if (snapshot.isNotEmpty) {
-      setState(() {
-        _recipes.addAll(snapshot);
-        // Élimination des doublons
-        _lastRecipe = snapshot.last;
-      });
-    }
-
-    setState(() {
-      _isLoading = false;
-    });
+    // init recipes list
+    _loadRecipes();
   }
 
   @override
   Widget build(BuildContext context) {
-    lang = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: Text(lang.recipeGenerateTitle),
         leading: backButton(context),
+        title: Text(lang.recipeGenerateTitle),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            ..._recipes.map((e) => LargRecipeCard(recipe: e.data())),
-            const SizedBox(height: 8),
-            if (_isLoading)
-              const CircularProgressIndicator()
-            else
-              TextButton(
-                onPressed: _loadRecipes,
-                style: TextButton.styleFrom(
-                  backgroundColor:
-                      Theme.of(context).primaryColor.withOpacity(0.05),
+      body: FutureBuilder(
+        future: _listRecipes,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const SizedBox();
+          }
+          if (snapshot.hasData && snapshot.data != null) {
+            if (snapshot.data!.isNotEmpty) {
+              _lastRecipe = snapshot.data!.last;
+              _historyListRecipes.addAll(snapshot.data ?? []);
+              _historyListRecipes = _historyListRecipes.toSet().toList();
+            }
+
+            return Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ..._historyListRecipes
+                        .map((e) => LargeRecipeCard(recipe: e.data())),
+                    const SizedBox(height: 8),
+                    if (_isLoading)
+                      const CircularProgressIndicator()
+                    else
+                      TextButton(
+                        onPressed: () {
+                          _loadRecipes();
+                          setState(() {});
+                        },
+                        style: TextButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).primaryColor.withOpacity(0.05),
+                        ),
+                        child: Text(
+                          lang.showMoreButtonLabel,
+                        ), // Utilisation du texte localisé
+                      ),
+                    const SizedBox(height: 24),
+                  ],
                 ),
-                child: Text(
-                  lang.showMoreButtonLabel,
-                ), // Utilisation du texte localisé
               ),
-            const SizedBox(height: 24),
-          ],
-        ),
+            );
+          }
+          return const SizedBox();
+        },
       ),
     );
   }
