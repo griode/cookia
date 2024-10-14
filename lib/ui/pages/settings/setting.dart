@@ -1,15 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cookia/data/model/user_model.dart';
 import 'package:cookia/ui/pages/abonement/subscription_page.dart';
+import 'package:cookia/ui/pages/settings/components/change_language.dart';
+import 'package:cookia/ui/pages/settings/components/change_theme.dart';
+import 'package:cookia/utils/router/app_route_name.dart';
+import 'package:cookia/utils/router/router_config.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:cookia/data/model/user_model.dart';
-import 'package:cookia/ui/pages/settings/components/change_language.dart';
-import 'package:cookia/ui/pages/settings/components/change_theme.dart';
-import 'package:cookia/utils/router/app_route_name.dart';
-import 'package:cookia/utils/router/router_config.dart';
 import 'package:share_plus/share_plus.dart';
 
 class SettingPage extends StatefulWidget {
@@ -126,7 +126,7 @@ class _SettingPageState extends State<SettingPage> {
             ),
             ListTile(
               onTap: () async {
-                Share.share("https://scangourmet.onrender.com");
+                Share.share("https://scangourmet.vercel.app");
               },
               leading: const Icon(HugeIcons.strokeRoundedShare01),
               title: Text(_appLocalizations!.sharedFriends),

@@ -147,5 +147,13 @@
   "mealtype": "{mealtype, select, breakfast{Petit-déjeuner} lunch{Déjeuner} dinner{Dîner} dessert{Dessert} snack{Sack} other{Autre}}",
   "continent": "{continent, select, north_american{Nord-Américain} south_american{Sud-Américain} european{Européen} asian{Asiatique} oceanian{Océanien} african{Africain} other{Autre}}",
   "mealCategory": "Catégories de repas",
-  "browseAll": "Voir tout"
+  "browseAll": "Voir tout",
+  "scan_gourmet_plus": "Scan Gourmet+",
+  "unlock_features": "Déverrouillez toutes les fonctionnalités premium pour seulement 2,99 € par mois.",
+  "remove_ads": "Suppression des publicités",
+  "generate_recipes": "Générez jusqu'à 50 recettes par jour",
+  "exclusive_premium_features": "Accès à des fonctionnalités premium exclusives",
+  "only_per_month": "Seulement 2,99 € par mois",
+  "subscribe_now": "S'abonner maintenant",
+  "cancel_anytime": "Annulable à tout moment"
 }

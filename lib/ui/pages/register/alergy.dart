@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:go_router/go_router.dart';
 import 'package:cookia/data/model/user_model.dart';
 import 'package:cookia/data/provider/user_provider.dart';
 import 'package:cookia/ui/widgets/back_button.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 import '../../../utils/router/router_config.dart';
 
@@ -59,6 +59,7 @@ class _AllergyPageState extends State<AllergyPage> {
               controller: _dietController,
               onTap: () => _selectDiet(),
               decoration: InputDecoration(
+                prefixIcon: const Icon(HugeIcons.strokeRoundedNaturalFood),
                 hintText: AppLocalizations.of(context)!.diet,
               ),
               style: const TextStyle(fontWeight: FontWeight.bold),
@@ -99,6 +100,7 @@ class _AllergyPageState extends State<AllergyPage> {
                   },
                   decoration: InputDecoration(
                     hintText: AppLocalizations.of(context)!.allergens,
+                    prefixIcon: const Icon(HugeIcons.strokeRoundedDates),
                     suffixIcon: IconButton(
                       onPressed: () {
                         if (_allergyTextController.text.isNotEmpty) {
@@ -109,7 +111,7 @@ class _AllergyPageState extends State<AllergyPage> {
                           });
                         }
                       },
-                      icon: const Icon(CupertinoIcons.add),
+                      icon: const Icon(HugeIcons.strokeRoundedPlusSignCircle),
                     ),
                   ),
                   onSubmitted: (String value) {},

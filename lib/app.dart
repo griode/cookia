@@ -67,7 +67,7 @@ class _AppState extends State<App> {
               darkTheme: themeDark(),
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
-              title: 'Scan Goumet',
+              title: 'Scan Gourmet',
               debugShowCheckedModeBanner: false,
             );
           },

@@ -1,146 +1,189 @@
 import 'package:flutter/material.dart';
-import 'package:in_app_purchase/in_app_purchase.dart'; // Pour les achats in-app
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hugeicons/hugeicons.dart';
 
-class SubscriptionPage extends StatefulWidget {
-  const SubscriptionPage({Key? key}) : super(key: key);
-
-  @override
-  State<SubscriptionPage> createState() => _SubscriptionPageState();
+void showSubscriptionDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return const SubscriptionPage();
+    },
+  );
 }
 
-class _SubscriptionPageState extends State<SubscriptionPage> {
-  final InAppPurchase _iap = InAppPurchase.instance;
-  bool _isAvailable = false;
-  List<ProductDetails> _products = [];
-  bool _loading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _initializePurchase();
-  }
-
-  // Initialiser les achats intégrés et charger les produits disponibles
-  Future<void> _initializePurchase() async {
-    final isAvailable = await _iap.isAvailable();
-    setState(() {
-      _isAvailable = isAvailable;
-    });
-    if (_isAvailable) {
-      const Set<String> _kIds = <String>{
-        'monthly_subscription'
-      }; // ID produit dans votre store
-      final ProductDetailsResponse response =
-          await _iap.queryProductDetails(_kIds);
-      if (response.notFoundIDs.isNotEmpty) {
-        // Gérer le cas où certains produits ne sont pas trouvés
-      }
-      setState(() {
-        _products = response.productDetails;
-        _loading = false;
-      });
-    }
-  }
-
-  // Effectuer l'achat d'un abonnement
-  void _buySubscription(ProductDetails productDetails) {
-    final PurchaseParam purchaseParam =
-        PurchaseParam(productDetails: productDetails);
-    _iap.buyNonConsumable(purchaseParam: purchaseParam);
-  }
+class SubscriptionPage extends StatelessWidget {
+  const SubscriptionPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    late final lang = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Abonnement Premium'),
-      ),
-      body: _loading
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                _headerSection(),
-                _benefitsSection(),
-                _products.isNotEmpty ? _subscriptionOptions() : _errorSection(),
-              ],
-            ),
-    );
-  }
-
-  // Header avec titre et description
-  Widget _headerSection() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: const [
-          Text(
-            'Passez à Premium',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 8),
-          Text(
-            'Supprimez les publicités et accédez à des fonctionnalités illimitées en vous abonnant maintenant.',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Section montrant les avantages de l'abonnement
-  Widget _benefitsSection() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
+      backgroundColor: Colors.transparent,
+      body: Stack(
         children: [
-          const ListTile(
-            leading: Icon(Icons.remove_circle_outline),
-            title: Text('Supprimez toutes les publicités'),
+          Container(
+            margin: const EdgeInsets.all(16.0),
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              color: Theme.of(context).canvasColor,
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Header Image
+                  const SizedBox(height: 16),
+                  // App Title
+                  Text(
+                    lang.scan_gourmet_plus,
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+
+                  SizedBox(height: 16),
+
+                  // Subscription Description
+                  Text(
+                    lang.unlock_features,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Theme.of(context)
+                          .textTheme
+                          .bodyLarge!
+                          .color!
+                          .withOpacity(0.9),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+
+                  SizedBox(height: 24),
+
+                  // Features List with Icons
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withOpacity(0.05),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Feature 1
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.block,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                lang.remove_ads,
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 12),
+                        // Feature 2
+                        Row(
+                          children: [
+                            Icon(Icons.receipt_long,
+                                color: Theme.of(context).colorScheme.primary),
+                            SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                lang.generate_recipes,
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 12),
+                        // Feature 3
+                        Row(
+                          children: [
+                            Icon(Icons.star,
+                                color: Theme.of(context).colorScheme.primary),
+                            SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                lang.exclusive_premium_features,
+                                style: const TextStyle(fontSize: 18),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(height: 24),
+
+                  // Price Section
+                  Text(
+                    lang.only_per_month,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color:
+                          Theme.of(context).colorScheme.primary.withOpacity(.8),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // Button to Subscribe
+                  FilledButton.icon(
+                    onPressed: () {
+                      // Logic to handle subscription
+                    },
+                    label: Text(lang.subscribe_now),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Cancel Info
+                  Text(
+                    lang.cancel_anytime,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context)
+                          .textTheme
+                          .bodyLarge!
+                          .color!
+                          .withOpacity(0.9),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-          const ListTile(
-            leading: Icon(Icons.lock_open),
-            title: Text('Accédez à des fonctionnalités illimitées'),
-          ),
-          const ListTile(
-            leading: Icon(Icons.update),
-            title: Text('Renouvellement automatique chaque mois'),
+          Positioned(
+            right: 0,
+            child: IconButton(
+              onPressed: () => context.pop(),
+              icon: const Icon(HugeIcons.strokeRoundedCancel01),
+              style: IconButton.styleFrom(
+                elevation: 4,
+                shadowColor: Theme.of(context).canvasColor,
+                backgroundColor: Theme.of(context).canvasColor,
+              ),
+            ),
           ),
         ],
-      ),
-    );
-  }
-
-  // Section pour les options d'abonnement
-  Widget _subscriptionOptions() {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: _products.length,
-        itemBuilder: (context, index) {
-          final product = _products[index];
-          return ListTile(
-            title: Text(product.title),
-            subtitle: Text(product.description),
-            trailing: Text(product.price),
-            onTap: () {
-              _buySubscription(product);
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  // Section en cas d'erreur de chargement des produits
-  Widget _errorSection() {
-    return const Center(
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Text(
-          'Erreur lors du chargement des options d\'abonnement.',
-          style: TextStyle(fontSize: 16, color: Colors.red),
-          textAlign: TextAlign.center,
-        ),
       ),
     );
   }
