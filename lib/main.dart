@@ -1,9 +1,9 @@
+import 'package:cookia/init_app.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cookia/app.dart';
-import 'package:cookia/data/function/init.dart';
 import 'package:cookia/data/provider/user_provider.dart';
 import 'package:cookia/data/services/firebase_notification.dart';
 import 'package:cookia/firebase_options.dart';
@@ -36,8 +36,7 @@ Future<void> main() async {
   await LocalNotifications.init();
 
   // init app language and theme
-  await initTheme();
-  await initAppLanguage();
+  await initApp();
 
   runApp(const App());
 }

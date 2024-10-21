@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:pay/pay.dart';
 
 void showSubscriptionDialog(BuildContext context) {
   showDialog(
@@ -12,13 +13,27 @@ void showSubscriptionDialog(BuildContext context) {
   );
 }
 
-class SubscriptionPage extends StatelessWidget {
+class SubscriptionPage extends StatefulWidget {
   const SubscriptionPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    late final lang = AppLocalizations.of(context)!;
+  State<SubscriptionPage> createState() => _SubscriptionPageState();
+}
 
+class _SubscriptionPageState extends State<SubscriptionPage> {
+  late final lang = AppLocalizations.of(context)!;
+
+  // Pay item
+  static const _paymentItems = [
+    PaymentItem(
+      label: 'Total',
+      amount: '1.99',
+      status: PaymentItemStatus.final_price,
+    )
+  ];
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Stack(
@@ -48,7 +63,7 @@ class SubscriptionPage extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
 
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
                   // Subscription Description
                   Text(
@@ -64,7 +79,7 @@ class SubscriptionPage extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
 
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
                   // Features List with Icons
                   Container(
@@ -95,13 +110,13 @@ class SubscriptionPage extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(height: 12),
+                        const SizedBox(height: 12),
                         // Feature 2
                         Row(
                           children: [
                             Icon(Icons.receipt_long,
                                 color: Theme.of(context).colorScheme.primary),
-                            SizedBox(width: 12),
+                            const SizedBox(width: 12),
                             Expanded(
                               child: Text(
                                 lang.generate_recipes,
@@ -110,7 +125,7 @@ class SubscriptionPage extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(height: 12),
+                        const SizedBox(height: 12),
                         // Feature 3
                         Row(
                           children: [
@@ -128,9 +143,7 @@ class SubscriptionPage extends StatelessWidget {
                       ],
                     ),
                   ),
-
-                  SizedBox(height: 24),
-
+                  const SizedBox(height: 24),
                   // Price Section
                   Text(
                     lang.only_per_month,
@@ -154,6 +167,19 @@ class SubscriptionPage extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 16),
+
+                  // GooglePayButton(
+                  //   paymentConfiguration: PaymentConfiguration.fromJsonString(
+                  //     "google_pay_config.json",
+                  //   ),
+                  //   paymentItems: _paymentItems,
+                  //   type: GooglePayButtonType.buy,
+                  //   margin: const EdgeInsets.only(top: 15.0),
+                  //   onPaymentResult: onGooglePayResult,
+                  //   loadingIndicator: const Center(
+                  //     child: CircularProgressIndicator(),
+                  //   ),
+                  // ),
 
                   // Cancel Info
                   Text(
@@ -186,5 +212,9 @@ class SubscriptionPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void onGooglePayResult(paymentResult) {
+    // Send the resulting Google Pay token to your server / PSP
   }
 }

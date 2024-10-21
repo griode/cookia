@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cookia/data/model/user_model.dart';
+import 'package:cookia/utils/router/router_config.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:cookia/data/model/user_model.dart';
-import 'package:cookia/utils/router/router_config.dart';
 
 class UserProvider {
   static final userCollection =
@@ -48,23 +48,24 @@ class UserProvider {
   }
 
   static Future<int> checkActivity() async {
-    if (currentUserAuth != null) {
-      if (currentUserAuth!.lastRequest != null) {
-        var differenceInMin = currentUserAuth!.lastRequest!
-                .toDate()
-                .difference(Timestamp.now().toDate())
-                .inMinutes *
-            -1;
-        if (differenceInMin >= 1440) {
-          await update({
-            'numberAuthorizedRequest': 3,
-          });
-        }
-      }
-      return currentUserAuth!.numberAuthorizedRequest;
-    } else {
-      throw "User not found";
+    if (currentUserAuth == null) {
+      return -1000;
     }
+
+    if (currentUserAuth!.lastRequest != null) {
+      var differenceInMin = currentUserAuth!.lastRequest!
+          .toDate()
+          .difference(Timestamp.now().toDate())
+          .inMinutes
+          .abs();
+
+      if (differenceInMin >= 1440) {
+        await update({
+          'numberAuthorizedRequest': 3,
+        });
+      }
+    }
+    return currentUserAuth!.numberAuthorizedRequest;
   }
 
   static Future<bool> updateActivity() async {

@@ -262,31 +262,33 @@ class _CreateRecipeState extends State<CreateRecipe> {
   Future<bool> _checkUserActivity() async {
     int response = await UserProvider.checkActivity();
 
+    // Cas des utilisateurs non premium
     if (!currentUserAuth!.isPremium) {
-      if (response > 0) return true; // User has activity left
+      if (response > 0) return true; // Activité restante disponible
+
       if (response >= -3) {
-        // Show ads
+        // Montrer les publicités si l'utilisateur a encore une marge
         _rewardedAd?.show(onUserEarnedReward: (_, reward) {
           debugPrint(reward.amount.toString());
         });
         return true;
       }
-      if (response < -3) {
-        showSubscriptionDialog(context);
-        _showLimitReachedSnackbar(
-            "Your reached the limit to generate recipes today. Try again in 24 hours or upgrade to the premium plan.");
 
-        return false;
-      }
-    } else {
-      if (response < -12) {
-        _showLimitReachedSnackbar(
-            "Your reached the limit to generate recipes today. Try again in 24 hours.");
-        return false;
-      }
-      return true; // Premium user has unlimited activity
+      // Si le seuil est atteint, on affiche un message et propose de s'abonner
+      showSubscriptionDialog(context);
+      _showLimitReachedSnackbar(
+          "You reached the limit to generate recipes today. Try again in 24 hours or upgrade to the premium plan.");
+      return false;
     }
-    return false;
+
+    // Cas des utilisateurs premium
+    if (response < -12) {
+      _showLimitReachedSnackbar(
+          "You reached the limit to generate recipes today. Try again in 24 hours.");
+      return false;
+    }
+
+    return true; // Utilisateurs premium ont une activité illimitée
   }
 
   void _showLimitReachedSnackbar(String message) {

@@ -147,5 +147,13 @@
   "mealtype": "{mealtype, select, breakfast{早餐} lunch{午餐} dinner{晚餐} dessert{甜品} snack{小吃} other{其他}}",
   "continent": "{continent, select, north_american{北美洲} south_american{南美洲} european{欧洲} asian{亚洲} oceanian{大洋洲} african{非洲} other{其他}}",
   "mealCategory": "食物类别",
-  "browseAll": "浏览全部"
+  "browseAll": "浏览全部",
+  "scan_gourmet_plus": "Scan Gourmet+",
+  "unlock_features": "Unlock all premium features for only €2.99 per month.",
+  "remove_ads": "Remove ads",
+  "generate_recipes": "Generate up to 50 recipes per day",
+  "exclusive_premium_features": "Access to exclusive premium features",
+  "only_per_month": "Only €2.99 per month",
+  "subscribe_now": "Subscribe Now",
+  "cancel_anytime": "Cancelable anytime"
 }
